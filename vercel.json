@@ -1,7 +1,24 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
+  "framework": "vite",
   "installCommand": "pnpm install --no-frozen-lockfile",
-  "buildCommand": "pnpm --dir client run build",
+  "buildCommand": "pnpm --filter darna-web run build",
   "outputDirectory": "client/dist",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "functions": {
+    "api/[...path].js": {
+      "maxDuration": 30
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/:path*",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    }
+  ],
+  "rewrites": [
+    { "source": "/:path((?!api(?:/|$)).*)", "destination": "/index.html" }
+  ]
 }

@@ -11,11 +11,36 @@ The responsive premium UI base is integrated from the supplied `fbennanipadel-gi
 3. `cd backend && npm install && npm run dev`
 4. `cd client && npm install && npm run dev`
 
+Workspace scripts are also available from the repository root with pnpm:
+
+- `pnpm install --no-frozen-lockfile`
+- `pnpm run build`
+- `pnpm run dev:client`
+- `pnpm run dev:api`
+
 The web app runs on `http://localhost:5173`; the API defaults to `http://localhost:5050` (port 5000 is commonly reserved by macOS services).
 
 ## Vercel
 
-Import the GitHub repository in Vercel from the repository root. `vercel.json` builds the React client and serves the Express/MongoDB API through `api/[...path].js`. Configure `MONGODB_URI`, `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, `OPENAI_API_KEY`, `OPENAI_MODEL`, `NFC_PROOF_SECRET`, and `CLIENT_URL` as Vercel environment variables. Set `CLIENT_URL` to the deployed web URL and do not add any secret to `VITE_*` variables.
+Import the GitHub repository in Vercel from the repository root.
+
+- Framework preset: Vite
+- Install command: `pnpm install --no-frozen-lockfile`
+- Build command: `pnpm --filter darna-web run build`
+- Output directory: `client/dist`
+- API runtime: `api/[...path].js` serves the Express/MongoDB app as a Vercel Function
+
+Configure these Vercel environment variables before the first production deployment:
+
+- `MONGODB_URI`
+- `JWT_ACCESS_SECRET`
+- `JWT_REFRESH_SECRET`
+- `OPENAI_API_KEY`
+- `OPENAI_MODEL`
+- `NFC_PROOF_SECRET`
+- `CLIENT_URL`
+
+Set `CLIENT_URL` to the deployed web URL. Do not add secrets to `VITE_*` variables; client variables are bundled into the browser.
 
 Never commit connection strings, tokens, Cloudinary credentials, or OpenAI keys.
 

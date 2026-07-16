@@ -1,1 +1,1 @@
-{"name":"darna","private":true,"packageManager":"pnpm@11.9.0","workspaces":["client","backend"],"scripts":{"build":"pnpm --dir client run build","dev:client":"pnpm --dir client run dev","dev:api":"pnpm --dir backend run dev"}}
+{"name":"darna","private":true,"type":"module","packageManager":"pnpm@11.9.0","workspaces":["client","backend"],"scripts":{"build":"pnpm --filter darna-web run build","dev:client":"pnpm --filter darna-web run dev","dev:api":"pnpm --filter darna-api run dev"}}
