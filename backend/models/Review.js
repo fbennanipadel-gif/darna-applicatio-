@@ -1,0 +1,2 @@
+import mongoose from 'mongoose';
+export default mongoose.model('Review',new mongoose.Schema({restaurant:{type:mongoose.Schema.Types.ObjectId,ref:'Restaurant',required:true,index:true},user:{type:mongoose.Schema.Types.ObjectId,ref:'User',required:true},rating:{type:Number,required:true,min:1,max:5},comment:{type:String,required:true,maxlength:1500},verifiedVisit:{type:mongoose.Schema.Types.ObjectId,ref:'VerifiedVisit',required:true},status:{type:String,enum:['published','hidden'],default:'published'}},{timestamps:true}).index({restaurant:1,user:1},{unique:true}));

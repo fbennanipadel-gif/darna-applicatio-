@@ -1,0 +1,2 @@
+import mongoose from 'mongoose';
+export default mongoose.model('VerifiedVisit',new mongoose.Schema({user:{type:mongoose.Schema.Types.ObjectId,ref:'User',required:true,index:true},restaurant:{type:mongoose.Schema.Types.ObjectId,ref:'Restaurant',required:true,index:true},nfcTagId:{type:String,required:true},verifiedAt:{type:Date,default:Date.now},reviewed:{type:Boolean,default:false}},{timestamps:true}));
