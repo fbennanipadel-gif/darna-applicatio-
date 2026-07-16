@@ -29,3 +29,6 @@ Thumbs.db
 # Data dumps
 *.tmp
 scratch/
+
+.vercel
+.env*

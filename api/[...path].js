@@ -10,7 +10,11 @@ export default async function handler(req, res) {
     await connection;
     return app(req, res);
   } catch (error) {
+    connection = undefined; // retry connection on next request
     console.error('Vercel database connection failed', error);
-    return res.status(503).json({ message: 'Database temporarily unavailable' });
+    return res.status(503).json({
+      message: 'Database temporarily unavailable',
+      detail: process.env.DEBUG_DB === '1' ? String(error && error.message) : undefined,
+    });
   }
 }
