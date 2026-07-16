@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Env & secrets
+.env
+.env.local
+.env.*.local
+backend/.env
+client/.env
+
+# Build output
+client/dist/
+dist/
+build/
+.vercel/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Data dumps
+*.tmp
+scratch/
