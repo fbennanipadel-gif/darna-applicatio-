@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { Home, Compass, Map, Heart, User, Sparkles, Sun, Moon, Search } from 'lucide-react';
-import { DarnaLogo, LogoMark } from '../lib/art';
+import { LogoMark } from '../lib/art';
+import { DarnaMark } from '../lib/brand';
 import { useAuth } from '../context/AuthContext';
 import Assistant from './Assistant';
 
@@ -39,7 +40,7 @@ export default function Layout() {
         backdropFilter: 'blur(12px)', borderBottom: '1px solid var(--line)',
       }}>
         <div className="container spread" style={{ height: '100%' }}>
-          <NavLink to="/" style={{ display: 'flex', alignItems: 'center' }}><DarnaLogo size={22} /></NavLink>
+          <NavLink to="/" style={{ display: 'flex', alignItems: 'center' }}><DarnaMark size={22} color="var(--primary)" textColor="var(--ink)" /></NavLink>
           <nav className="row" style={{ gap: 4 }}>
             {NAV.map(({ to, label, icon: Icon, end }) => (
               <NavLink key={to} to={to} end={end} style={({ isActive }) => ({
@@ -73,8 +74,8 @@ export default function Layout() {
         position: 'sticky', top: 0, zIndex: 40, height: 56, display: 'none',
         background: 'color-mix(in srgb, var(--surface) 90%, transparent)', backdropFilter: 'blur(12px)',
         borderBottom: '1px solid var(--line)', padding: '0 16px', alignItems: 'center', justifyContent: 'space-between',
-      }} data-mobile-header>
-        <DarnaLogo size={19} />
+      }} data-mobile-header={loc.pathname === '/' ? 'hidden' : 'shown'}>
+        <DarnaMark size={19} color="var(--primary)" textColor="var(--ink)" />
         <div className="row" style={{ gap: 6 }}>
           <button className="press" onClick={toggleTheme} aria-label="Thème" style={iconBtn}>{theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}</button>
           <button className="press" onClick={goSearch} aria-label="Rechercher" style={iconBtn}><Search size={18} /></button>
@@ -107,7 +108,7 @@ export default function Layout() {
       </nav>
 
       <Assistant open={asstOpen} onClose={() => setAsstOpen(false)} />
-      <style>{`@media (max-width:899px){[data-mobile-header]{display:flex!important}}`}</style>
+      <style>{`@media (max-width:899px){[data-mobile-header="shown"]{display:flex!important}}`}</style>
     </div>
   );
 }
