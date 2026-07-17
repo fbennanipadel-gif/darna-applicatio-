@@ -85,10 +85,24 @@ export function createApp() {
 
   if (process.env.NODE_ENV !== 'production') app.use(morgan('dev'));
 
-  app.get('/api/health', (req, res) => {
+  app.get('/api/health', async (req, res) => {
+    const mongoose = (await import('mongoose')).default;
+    const states = ['disconnected', 'connected', 'connecting', 'disconnecting'];
+    let dbPing = null;
+    if (mongoose.connection.readyState === 1) {
+      const t0 = Date.now();
+      try {
+        await mongoose.connection.db.admin().ping();
+        dbPing = Date.now() - t0;
+      } catch {
+        dbPing = -1;
+      }
+    }
     res.json({
       status: 'ok',
       service: 'darna-api',
+      db: states[mongoose.connection.readyState] || 'unknown',
+      dbPingMs: dbPing,
       time: new Date().toISOString(),
     });
   });

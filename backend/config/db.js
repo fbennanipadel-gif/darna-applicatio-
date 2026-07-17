@@ -10,9 +10,15 @@ export async function connectDatabase() {
     mongoose.set('strictQuery', true);
     cached.promise = mongoose
       .connect(process.env.MONGODB_URI, {
-        serverSelectionTimeoutMS: 8000,
-        connectTimeoutMS: 8000,
+        serverSelectionTimeoutMS: 10000,
+        connectTimeoutMS: 10000,
+        socketTimeoutMS: 45000,
+        // Recycle idle sockets before Atlas drops them silently (serverless-safe).
+        maxIdleTimeMS: 60000,
         maxPoolSize: 5,
+        minPoolSize: 0,
+        retryWrites: true,
+        retryReads: true,
       })
       .then((m) => {
         console.log(`MongoDB connected: ${m.connection.host}`);
