@@ -67,13 +67,17 @@ export function createApp() {
     skip: skipInDev,
   }));
 
-  app.use('/api/auth', rateLimit({
+  // Brute-force protection ONLY on credential endpoints. /auth/me and /auth/refresh
+  // are harmless token checks fired on every page load — they stay on the global limit.
+  const credentialLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    limit: 20,
+    limit: 30,
     standardHeaders: 'draft-8',
     legacyHeaders: false,
     skip: skipInDev,
-  }));
+  });
+  app.use('/api/auth/login', credentialLimiter);
+  app.use('/api/auth/register', credentialLimiter);
 
   app.use(express.json({ limit: '1mb' }));
   app.use((req, res, next) => {

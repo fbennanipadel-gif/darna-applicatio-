@@ -21,7 +21,10 @@ api.interceptors.response.use(
     const original = error.config || {};
 
     // 401 → try one token refresh, then replay the request.
-    if (error.response?.status === 401 && !original._retried401) {
+    // Only when a token existed (something to refresh) and never for the refresh call itself.
+    const hadToken = !!localStorage.getItem('darna_access_token');
+    const isRefreshCall = (original.url || '').includes('/auth/refresh');
+    if (error.response?.status === 401 && !original._retried401 && hadToken && !isRefreshCall) {
       original._retried401 = true;
       try {
         const { data } = await api.post('/auth/refresh');

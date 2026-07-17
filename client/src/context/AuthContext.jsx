@@ -9,8 +9,12 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Anonymous visitors have no token → skip /auth/me entirely (saves rate-limit budget).
     const token = localStorage.getItem(TOKEN_KEY);
-    // Only attempt /me if we have a token or might have a refresh cookie.
+    if (!token) {
+      setLoading(false);
+      return;
+    }
     api
       .get('/auth/me')
       .then(({ data }) => setUser(data.user))
