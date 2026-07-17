@@ -4,6 +4,7 @@ import { ArrowLeft, Heart, Star, MapPin, Phone, Globe, Clock, Navigation, BadgeC
 import { useRestaurant, useToggleFavorite, useSubmitReview, useIsFavorite } from '../lib/hooks';
 import { useAuth } from '../context/AuthContext';
 import { RestaurantArt, priceText } from '../lib/art';
+import { XLogo, InstagramLogo, FacebookLogo } from '../lib/brand';
 import { Stars, Spinner, Badge, Empty } from '../components/ui';
 import RestaurantMap from '../components/RestaurantMap';
 
@@ -70,6 +71,24 @@ export default function RestaurantDetail() {
 
         {r.shortDescription && <p style={{ fontSize: 17, lineHeight: 1.6, margin: 0 }}>{r.description || r.shortDescription}</p>}
 
+        {/* Social & web presence */}
+        {(r.social?.instagram || r.social?.facebook || r.social?.twitter || r.website) && (
+          <div className="row" style={{ gap: 10, flexWrap: 'wrap' }}>
+            {r.social?.instagram && (
+              <SocialIcon href={r.social.instagram.startsWith('http') ? r.social.instagram : `https://instagram.com/${r.social.instagram.replace(/^@/, '')}`} label="Instagram"><InstagramLogo size={18} /></SocialIcon>
+            )}
+            {r.social?.facebook && (
+              <SocialIcon href={r.social.facebook.startsWith('http') ? r.social.facebook : `https://facebook.com/${r.social.facebook}`} label="Facebook"><FacebookLogo size={18} /></SocialIcon>
+            )}
+            {r.social?.twitter && (
+              <SocialIcon href={r.social.twitter.startsWith('http') ? r.social.twitter : `https://x.com/${r.social.twitter.replace(/^@/, '')}`} label="X"><XLogo size={16} /></SocialIcon>
+            )}
+            {r.website && (
+              <SocialIcon href={r.website.startsWith('http') ? r.website : `https://${r.website}`} label="Site web"><Globe size={18} /></SocialIcon>
+            )}
+          </div>
+        )}
+
         {/* Offers */}
         {offers.length > 0 && (
           <div className="stack" style={{ gap: 10 }}>
@@ -119,6 +138,17 @@ export default function RestaurantDetail() {
 
       <style>{`@media(min-width:760px){[data-info-grid]{grid-template-columns:1fr 1fr!important;align-items:start}}`}</style>
     </div>
+  );
+}
+
+function SocialIcon({ href, label, children }) {
+  return (
+    <a className="press" href={href} target="_blank" rel="noreferrer" aria-label={label} style={{
+      width: 44, height: 44, borderRadius: 13, display: 'grid', placeItems: 'center',
+      background: 'var(--surface)', border: '1px solid var(--line)', color: 'var(--ink)', boxShadow: 'var(--shadow-sm)',
+    }}>
+      {children}
+    </a>
   );
 }
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Search, MapPin, ChevronDown, Bell, User, Heart, Star, CheckCircle2, TrendingUp, Sparkles, ArrowRight, Utensils, X } from 'lucide-react';
-import { useTrending, useRecommended, useRestaurants, useIsFavorite, useToggleFavorite } from '../lib/hooks';
+import { useTrending, useRecommended, useRestaurants, useIsFavorite, useToggleFavorite, useGeolocation } from '../lib/hooks';
 import { useAuth } from '../context/AuthContext';
 import { ZelligePattern, DarnaMark, LogoBadge } from '../lib/brand';
 import RestaurantCard from '../components/RestaurantCard';
@@ -17,7 +17,15 @@ export default function Home() {
   const [cityOpen, setCityOpen] = useState(false);
   const [activeCat, setActiveCat] = useState(null);
 
-  const popular = useRestaurants({ city, sort: 'popular', limit: 8, ...(activeCat ? { category: activeCat } : {}) });
+  // Real device location → genuinely "près de vous"; falls back to the chosen city.
+  // Only trust GPS when it's inside Morocco, otherwise nearby search would be empty.
+  const geo = useGeolocation();
+  const inMorocco = geo.pos && geo.pos.lat > 20 && geo.pos.lat < 37 && geo.pos.lng > -18 && geo.pos.lng < 0;
+  const popular = useRestaurants(
+    inMorocco
+      ? { sort: 'nearby', lat: geo.pos.lat, lng: geo.pos.lng, limit: 8, ...(activeCat ? { category: activeCat } : {}) }
+      : { city, sort: 'popular', limit: 8, ...(activeCat ? { category: activeCat } : {}) }
+  );
   const trending = useTrending({ limit: 8 });
   const recommended = useRecommended(!!user);
   const isFav = useIsFavorite();
@@ -89,7 +97,7 @@ export default function Home() {
         </div>
 
         {/* Populaires près de vous — horizontal rail (BigCard design) */}
-        <SectionTitle title="Populaires près de vous" suffix={` · ${city}`} />
+        <SectionTitle title="Populaires près de vous" suffix={inMorocco ? ' · autour de moi' : ` · ${city}`} />
         {popular.isLoading ? (
           <div className="scroll-x" style={{ gap: 14 }}>{[1, 2, 3].map((i) => <div key={i} className="skeleton" style={{ width: 196, height: 208, flexShrink: 0, borderRadius: 20 }} />)}</div>
         ) : popular.data?.items?.length ? (

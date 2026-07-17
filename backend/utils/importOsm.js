@@ -208,6 +208,7 @@ function toDoc(el) {
   const website = tags.website || tags['contact:website'] || '';
   const instagram = tags['contact:instagram'] || '';
   const facebook = tags['contact:facebook'] || '';
+  const twitter = tags['contact:twitter'] || tags['contact:x'] || '';
   const hoursText = tags.opening_hours || '';
   const cats = parseCategories(tags);
 
@@ -238,7 +239,7 @@ function toDoc(el) {
     location: { type: 'Point', coordinates: [lng, lat] },
     phone: phone || undefined,
     website: website || undefined,
-    social: { instagram: instagram || undefined, facebook: facebook || undefined },
+    social: { instagram: instagram || undefined, facebook: facebook || undefined, twitter: twitter || undefined },
     openingHoursText: hoursText || undefined,
     priceLevel,
     rating: 0,

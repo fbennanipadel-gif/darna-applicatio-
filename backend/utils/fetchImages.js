@@ -81,7 +81,7 @@ const POOL = {
   crêperie: [u('photo-1519676867240-f03562e64548'), u('photo-1565299543923-37dd37887442')],
   chicken: [u('photo-1626645738196-c2a7c87a8f58'), u('photo-1562967914-608f82629710')],
   tacos: [u('photo-1565299585323-38d6b0865b47'), u('photo-1551504734-5ee1c4a1479b')],
-  méditerranéen: [u('photo-1540914124281-342587941389'), u('photo-1544510806-7bd3e1c31753')],
+  méditerranéen: [u('photo-1540914124281-342587941389'), u('photo-1512621776951-a57141f2eefd')],
   végétarien: [u('photo-1512621776951-a57141f2eefd'), u('photo-1540420773420-3366772f4999')],
   restaurant: [
     u('photo-1517248135467-4c7edcad34c4'), // restaurant interior

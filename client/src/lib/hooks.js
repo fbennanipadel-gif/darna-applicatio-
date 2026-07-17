@@ -1,3 +1,4 @@
+import React from 'react';
 import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
@@ -69,6 +70,49 @@ export function useAskConcierge() {
   return useMutation({
     mutationFn: (payload) => api.post('/ai/chat', payload).then((r) => r.data),
   });
+}
+
+export function useLoyalty(enabled) {
+  return useQuery({
+    queryKey: ['loyalty'],
+    queryFn: () => get('/users/me/loyalty'),
+    enabled: !!enabled,
+  });
+}
+
+export function useMyReviews(enabled) {
+  return useQuery({
+    queryKey: ['myReviews'],
+    queryFn: () => get('/users/me/reviews'),
+    enabled: !!enabled,
+  });
+}
+
+export function useUpdateMe() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (body) => api.patch('/users/me', body).then((r) => r.data),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['loyalty'] }),
+  });
+}
+
+/** Real device location (GPS) with graceful denial. */
+export function useGeolocation() {
+  const [pos, setPos] = React.useState(null);
+  const [status, setStatus] = React.useState('idle'); // idle · granted · denied
+  const request = React.useCallback(() => {
+    if (!navigator.geolocation) return setStatus('denied');
+    navigator.geolocation.getCurrentPosition(
+      (p) => {
+        setPos({ lat: p.coords.latitude, lng: p.coords.longitude });
+        setStatus('granted');
+      },
+      () => setStatus('denied'),
+      { enableHighAccuracy: false, timeout: 8000, maximumAge: 300000 }
+    );
+  }, []);
+  React.useEffect(() => { request(); }, [request]);
+  return { pos, status, request };
 }
 
 /** Whether the current user has favorited a given restaurant id (from /auth/me + favorites cache). */
